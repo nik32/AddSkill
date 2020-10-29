@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int i, j, size = nums.size();
+        long sum = 0;
+        vector<int> ans(2);
+        for(i = 0 ; i < size ; i++)
+        {   sum = nums[i];
+            for(j = i+1 ; j < size; j++)
+            {
+                sum += nums[j];
+                //printf("%ld ",sum);
+                if(sum == target){
+                    ans[0] = i, ans[1] = j;
+                    return ans;
+                }
+                else
+                    sum -= nums[j];
+            }
+        }
+        return ans;
+    }
+};
