@@ -1,0 +1,37 @@
+//in this converted the nums into corresponding strings because it helped to over come problem in  previous approach (trailing 0's not being included in ans sue to logic of revesring a num). 
+//Also made code simpler code using inbuilt function in string class
+
+class Solution {
+public:
+    
+    static bool comparator(string n1, string n2)
+    {
+        int i;
+        string n1n2 = n1+n2, n2n1 = n2+n1;
+
+        for(i = 0 ; i < n1n2.length() ; i++)
+            if(n1n2[i] != n2n1[i])
+                break;
+
+        return (n1n2[i] > n2n1[i]) ? true : false;
+    }
+    
+    string largestNumber(vector<int>& nums) {
+        string ans = "";
+        bool zero = 1;
+        vector<string> nums_str;
+        
+        for(int i = 0 ; i < nums.size() ; i++)
+            nums_str.push_back(to_string(nums[i]));
+        
+        sort(nums_str.begin(), nums_str.end(), comparator);
+
+        if(nums_str[0] == "0" & nums_str[nums.size() - 1] == "0")
+            return "0";
+        
+        for(int i = 0 ; i < nums.size() ; i++)
+            ans = ans + nums_str[i];
+        
+        return ans;
+    }
+};
