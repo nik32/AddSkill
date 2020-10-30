@@ -1,0 +1,54 @@
+//TODO Later - Maybe code can be made more redable and other refinments can be done
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+        if(head == NULL)
+            return head;
+        
+        ListNode *temp = head->next, *temp2 = NULL, *next = NULL, *pri_temp = head, *pri_temp2;
+        while(temp != NULL)
+        {
+            temp2 = head;
+            next = temp->next;
+            pri_temp2 = temp2;
+            int key = temp->val;
+            while(temp2 != temp && temp2->val <= key)
+                pri_temp2 = temp2, temp2 = temp2->next;
+            
+            if(temp2 != temp)
+            {
+                bool start = 0;
+                if(temp2 == head)
+                    start = 1;
+                
+                temp2 = pri_temp2;
+                pri_temp->next = temp->next;
+                if(start)
+                {
+                    temp->next = head;
+                    head = temp;
+                }
+                else
+                {
+                    temp->next = temp2->next;
+                    temp2->next = temp;
+                }
+            }
+            else
+                pri_temp = temp;
+                
+            temp = next;
+        }
+        return head;
+    }
+};
