@@ -1,0 +1,9 @@
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int i = 0, size = nums.size();
+        while(i < size && nums[i] < target)
+            i++;
+        return i;
+    }
+};
