@@ -1,0 +1,24 @@
+/*Source - https://math.stackexchange.com/questions/2681515/triangle-with-no-area-when-c-ab
+            https://stackoverflow.com/questions/33037449/given-three-side-of-a-triangle-how-can-i-define-whether-it-is-a-degenerate-tria/33037859*/
+
+class Solution {
+public:
+    int largestPerimeter(vector<int>& A) {
+        sort(A.begin(), A.end());
+        int n = A.size(), p1 = n-3, p2 = n-2, p3 = n-1;
+        int a, b, c;
+        while(p1 >= 0)
+        {
+            a = A[p1], b = A[p2], c = A[p3];
+            if(a + b > c)
+                break;
+            if(p3-1 != p2)
+                p3--;
+            else if(p2-1 != p1)
+                p2--;
+            else
+                p1--;
+        }
+        return p1 >= 0 ? a+b+c : 0;
+    }
+};
