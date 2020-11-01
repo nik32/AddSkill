@@ -1,0 +1,35 @@
+//complexity of this is O(3n) [3n is becuase - in findNextGreater() the first loop will run n times and we are calling findNextGreater() 2 time (this is a 2 pass algo), So this becomes 2n. Then the stack size will n at max so the inner while loop will also run n times (as it performs pop operations on stack) whihc gives us another n. So now 2n+n makes it 3n] which is O(n)
+//Space is O(2n) [one n for ans and one n for stack s] whixh is still O(n)
+
+class Solution {
+public:
+    void findNextGreater(vector<int>& nums, vector<int>& ans, stack< pair<int, int> >& not_found)
+    {
+        for(int i = 0 ; i < nums.size() ; i++)
+        {
+            if(!not_found.empty())
+            {
+                pair<int, int> num = not_found.top();
+                while(!not_found.empty() && num.first < nums[i])
+                {
+                    ans[num.second] = nums[i];
+                    not_found.pop();
+                    if(!not_found.empty())  num = not_found.top();
+                }
+            }
+            if(ans[i] == -1)    not_found.push(make_pair(nums[i], i));
+        }
+    }
+    
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        stack< pair<int, int> >not_found; //This contains all the nums, with their pos in input array, whose next greater elemnt is not found
+        vector<int> ans(nums.size(), -1);
+        
+        findNextGreater(nums, ans, not_found);//this will find the next greater element of num[i] if the next greater elemnt is ahead of num[i];
+        
+        if(!not_found.empty())//stack empty means that we have found the next greater element of all nums. But if stack is not empty means there are nums whose next greater element is not found ahead of them. So we check if next greater elemnt is behind using (1). We can reach behind elemnts also due to it being circular array  
+            findNextGreater(nums, ans, not_found);//(1)
+        
+        return ans;
+    }
+};
