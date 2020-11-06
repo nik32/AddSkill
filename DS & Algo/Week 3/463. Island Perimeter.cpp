@@ -1,5 +1,3 @@
-//This is a tricky question So note it. Firstly it took you some time to think the sol (considering this is a easy problem). Then you took 2 attempts to know the edge cases and then it took you time to think about the condtions of the edge cases.
-​
 //This can also be optimised because the cell[] space is not required.
 ​
 /*The logic is - 
