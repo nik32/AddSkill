@@ -1,5 +1,3 @@
-​
-​
 class Solution {
 public:
     bool binarySearch(const vector< vector<int> >& matrix, int *l, int r, int target, bool pass, int i)
