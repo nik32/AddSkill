@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Currency Converter</title>
+        <script src="js/Converter.js"></script>
+    </head>
+
+    <body>
+
+        <div style= "margin: 35px auto">
+            <center><h1>Currency Converter</h1></center>
+        </div>
+
+        <div style="display: table; border: 5px; margin: 25px auto;">
+                <form>
+                    <div style="display: block;">
+                        <select id="input_currency_dropdown" style="margin-right: 10px;">
+                            <option value="INR">INR</option>
+                            <option value="Pound">Pound</option>
+                            <option value="Dollar">Dollar</option>
+                        </select>
+                        <input type="number" id="input_currency_feild">
+                    </div><br>
+        
+                    <div style="display: block;">                        
+                        <input type="button" value = "Convert To" style="width: 100%;" onclick="RunScript()">
+                    </div><br>
+        
+                    <div style="display: block;">
+                        <select id="output_currency_dropdown" style="margin-right: 10px;">
+                            <option value="INR">INR</option>
+                            <option value="Pound">Pound</option>
+                            <option value="Dollar">Dollar</option>
+                        </select>
+                        <input type="text" id="output_currency_feild" readonly>
+                    </div>
+
+                    <script>
+                        function RunScript()
+                        {
+                            let from = document.getElementById("input_currency_dropdown").value;
+                            let to = document.getElementById("output_currency_dropdown").value;
+                            let from_val = Number(document.getElementById("input_currency_feild").value);
+                            let to_val = converter(from, to, from_val);
+                            document.getElementById("output_currency_feild").value = to_val;
+                            //console.log(from, to, from_val, to_val);
+                        }
+                    </script>
+                </form>
+        </div>
+
+    </body>
+</html>
