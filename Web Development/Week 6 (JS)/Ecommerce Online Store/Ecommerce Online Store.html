@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Cool Veggies</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <!-- <script src="js/CartScript.js"></script> -->
+
+  <style>
+    /* Remove the navbar's default rounded borders and increase the bottom margin */
+    .navbar {
+      margin-bottom: 50px;
+      border-radius: 0;
+    }
+
+    /* Remove the jumbotron's default bottom margin */
+    .jumbotron {
+      margin-bottom: 0;
+    }
+
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#"></a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#"> <strong> Best Veggies </strong> </a></li>
+          <li><a href="#">Products</a></li>
+          <li><a href="#">Deals</a></li>
+          <li><a href="#">Stores</a></li>
+          <li><a href="#">Contact</a></li>
+          <li>
+              <input type="input" id="search-box" list="query-list" style="margin-top: 11px; margin-left: 15px;" onkeyup = "filterByName(this.value)">
+              <datalist id="query-list"></datalist>
+              <button onclick="saveSearchQuery()">Save Query</button>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <select id="typefilter-dropdown" onclick="filterByType(this.value)" style="margin-top: 15px; margin-right: 15px;">
+              <option value="All" >All</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Veggies">Veggies</option>
+            </select>
+          </li>
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+          <li><a href="Cart.html" target="_blank"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div id="tomatoDiv" class="col-sm-4">
+        <div class="panel panel-primary" onmouseover="changePanelColorToBlue(this, 0)" onmouseout="changePanelColorToDefault(this, 0)">
+          <div class="panel-heading">Tomato</div>
+          <div class="panel-body"><img src="cart Images/tomato.jpg" class="img-responsive"
+              style="width:100%; height: 250px;" alt="Image"></div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-primary" onclick="addToCart('Tomato')">Buy
+              Tomato's</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-primary" onmouseover="changePanelColorToBlue(this, 1)" onmouseout="changePanelColorToDefault(this, 1)">
+          <div class="panel-heading">Cucumber</div>
+          <div class="panel-body"><img src="cart Images/cucumber.jpg" class="img-responsive"
+              style="width:100%;  height: 250px;" alt="Image"></div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-primary"  onclick="addToCart('Cucumber')">Buy
+              Cucumber's</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-primary" onmouseover="changePanelColorToBlue(this, 2)" onmouseout="changePanelColorToDefault(this, 2)">
+          <div class="panel-heading">Chilli</div>
+          <div class="panel-body"><img src="cart Images/chilli.jpg" class="img-responsive"
+              style="width:100%; height: 250px" alt="Image"></div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-primary"  onclick="addToCart('Chilli')">Buy
+              Chilli's</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div><br>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="panel panel-primary" onmouseover="changePanelColorToBlue(this, 3)" onmouseout="changePanelColorToDefault(this, 3)">
+          <div class="panel-heading">Strawberry</div>
+          <div class="panel-body"><img id="strawberyImg" src="cart Images/strawbery.jpg" class="img-responsive"
+              style="width:100%; height: 250px;" alt="Image"></div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-primary"  onclick="addToCart('Strawberry')">Buy
+              Strawberry's</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-primary" onmouseover="changePanelColorToBlue(this, 4)" onmouseout="changePanelColorToDefault(this, 4)">
+          <div class="panel-heading">Mango's</div>
+          <div class="panel-body"><img src="cart Images/mango.jpg" class="img-responsive"
+              style="width:100%;  height: 250px;" alt="Image"></div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-primary"  onclick="addToCart('Mango')">Buy
+              Mango's</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="panel panel-primary" onmouseover="changePanelColorToBlue(this, 5)" onmouseout="changePanelColorToDefault(this, 5)">
+          <div class="panel-heading">Pineapple</div>
+          <div class="panel-body"><img src="cart Images/pineapple.jpg" class="img-responsive"
+              style="width:100%; height: 250px" alt="Image"></div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-primary"  onclick="addToCart('Pineapple')">Buy
+              Pineapple's</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><br><br>
+
+  <footer class="container-fluid text-center">
+    <p>Online Store Copyright</p>
+    <form class="form-inline">Get deals:
+      <input id = "email" type="email" class="form-control" size="50" placeholder="Email Address" onclick="makeWhite()">
+      <button type="button" class="btn btn-danger" onclick="validateEmail()">Sign Up</button>
+    </form>
+  </footer>
+
+</body>
+
+<script>
+  //functions related to task 2) starts from here
+  function makeWhite()
+  {
+    document.getElementById("email").style.borderColor = null;
+  }
+
+  function validateEmail()
+  {
+    let email = document.getElementById("email").value;
+    if(email.indexOf("@") <= -1)
+      document.getElementById("email").style.borderColor = "red";
+  }
+
+
+  //functions related to task 6) & 7) starts from here
+  let time_mouse_over = Array(6).fill(0), start_time;
+  function changePanelColorToBlue(ele, indx)
+  {
+    ele.style.borderColor = "lightblue"
+    ele.title = "Time spent: " + time_mouse_over[indx].toFixed(2) + ' secs';
+    start_time = new Date();
+    //console.log("MOUSE OVER: " + start_time.getSeconds());
+  }
+  function changePanelColorToDefault(ele, indx) 
+  {
+    ele.style.borderColor = null;
+    time_mouse_over[indx] += (new Date() - start_time) / 1000;
+    //console.log("MOUSE Out: ");
+    start_time = 0;
+  }
+
+
+  //function related to task 4) starts from here
+  let queries=new Set();
+  function saveSearchQuery()
+  {
+    query = document.getElementById("search-box").value;
+    if(!queries.has(query))
+      document.getElementById("query-list").innerHTML += `<option value = ${query}></option>`;
+
+    queries.add(query);
+    document.getElementById("search-box").value = "";
+  }
+
+  
+  //NOTE - There is a dependency between task 3 & 5
+
+  //function related to task 3) starts from here
+  names = ["tomato", "cucumber", "chilli", "strawberry", "mango", "pineapple"]; 
+  types = ["Veggie", "Veggie", "Veggie", "Fruit", "Fruit", "Fruit"];
+  function filterByName(name)
+  {
+    type = document.getElementById("typefilter-dropdown").value;//due to dependancy, we also have to get the type given in dropdown and filter based on that also
+    for(let i = 0 ; i < 6 ; i++)
+      if(names[i].startsWith(name.toLowerCase()) && (types[i][0] == type[0] || type == "All"))
+        document.getElementsByClassName("col-sm-4")[i].style.display = "inline";
+      else
+        document.getElementsByClassName("col-sm-4")[i].style.display = "none";
+  }
+
+  //function related to task 5) starts from here 
+  function filterByType(type)
+  {
+    name = document.getElementById("search-box").value; //due to dependancy, we also have to get the name given in search box and filter based on that also
+    for(let i = 0 ; i < 6 ; i++)
+      if((types[i][0] == type[0] || type == "All") && names[i].startsWith(name))
+        document.getElementsByClassName("col-sm-4")[i].style.display = "inline";
+      else
+        document.getElementsByClassName("col-sm-4")[i].style.display = "none";
+  }
+
+  //function related to task 1) starts from here. This cart{} is used in the Cart.html file
+  let cart = {}
+  function addToCart(name)
+  {
+      if(cart[name] == undefined)
+          cart[name] = 1;
+      else
+          cart[name]++;
+      localStorage.setItem("cart", JSON.stringify(cart)); 
+  }
+
+</script>
+
+</html>

@@ -1,0 +1,42 @@
+<html>
+
+    <head>
+        <title>Cart</title>
+        <style>
+            td
+            {
+                padding: 6px 15px;
+            }
+        </style>
+    </head>
+
+    <body onload="displayCart()">
+        <center>
+            <h1 style="margin-top: 40px;">Cart</h1><br>
+            <table style="border: 1px black solid;" >
+                <thead>
+                    <td>Item</td>
+                    <td>Quantity</td>
+                </thead>
+                <tbody id="cart">
+                </tbody>
+            </table>
+        </center>
+        
+    </body>
+
+    <script>
+        function displayCart()
+        {
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            console.log(cart['Tomato']);
+            for(product in cart)
+                document.getElementById("cart").innerHTML += 
+                `<tr>
+                    <td>${product}</td>
+                    <td>${cart[product]}</td>
+                </tr>`;
+        }
+    </script>
+
+</html>
