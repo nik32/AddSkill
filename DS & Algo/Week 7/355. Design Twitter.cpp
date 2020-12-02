@@ -1,4 +1,3 @@
-//This is a medium-hard question because it took a lot of time for you to think for solution an even the coding it took you longer.
 class Twitter {
 private:
     /*  1. follows[i] - returns set of all the people, the user_i follows.
