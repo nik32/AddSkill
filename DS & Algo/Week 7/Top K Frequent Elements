@@ -1,0 +1,26 @@
+//This is a medium question because you could come up with O(nlogn) soltion only using heaps. There is a O(nlogk) solution for this using heaps only but a slight variation. 
+//This que is interesting becuase it is an application of both maps and heaps 
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> nums_freq;
+        priority_queue<pair<int, int>> max_heap;
+        vector<int> ans;
+        for(int i = 0 ; i < nums.size() ; i++)
+            if(nums_freq.find(nums[i]) == nums_freq.end())
+                nums_freq.insert(make_pair(nums[i], 1));
+            else
+                nums_freq[nums[i]]++;
+        
+        for(unordered_map<int, int>::iterator i = nums_freq.begin() ; i != nums_freq.end() ; i++)
+            max_heap.push(make_pair(i->second, i->first));
+        
+        for(int i = 0 ; i < k; i++)
+        {
+            ans.push_back(max_heap.top().second);
+            max_heap.pop();
+        }
+        
+        return ans;
+    }
+};
