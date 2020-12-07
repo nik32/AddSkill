@@ -1,0 +1,20 @@
+//This is a medium question because you could only think of sorting and with heaps you thing was the complexity will be same O(logn). But if you jsut modify the heap (like we did in this sol), comlexity can be O(NlogK)
+//Similar Question- 378. Kth Smallest Element in a Sorted Matrix
+
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int, vector<int>, greater<int>> min_heap;
+        for(int i = 0 ; i < nums.size() ; i++)
+        {
+            if(min_heap.size() < k)//use min_heap.size() as it more accuratly explains the logic and is also helpful if we deal with 2-d matrix instead of 1-d matrix of nums
+                min_heap.push(nums[i]);
+            else if(nums[i] > min_heap.top())
+            {
+                min_heap.pop();
+                min_heap.push(nums[i]);
+            }
+        }
+        return min_heap.top();
+    }
+};
