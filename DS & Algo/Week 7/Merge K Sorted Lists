@@ -1,0 +1,52 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        /*method 1 - store all list elements in the array and sort the resultant array. Works becuase number of lists are only 500
+                     ans each of size < 10^4 So mac num of elemnts will be 500 * 10^4 which is a little over 10^6 wihch can be
+                     stored in an array. But this become soon impossible when if let's say there are 10^6 list with 10^10 size. In
+                     this case we can use the second apprach of storing 1st elemnt of each list in min_heap and getting the min
+                     element in the resultant list. Then take the 2nd elemnt from the list to which our min elemnt belonged and 
+                     insert it in our heap and heapify it. We go on till we ehaust all the lists*/
+               
+        
+        ListNode *head, *ans_list_head, *pri, *temp;
+        vector<int> ans;
+        
+        for(int i = 0 ; i < lists.size(); i++)
+        {
+            head = lists[i];
+            while(head != NULL)
+            {
+                ans.push_back(head->val);
+                head = head->next;
+            }
+        }
+        
+        if(ans.size() == 0)
+            return NULL;
+        
+        sort(ans.begin(), ans.end());
+        
+        ans_list_head = new ListNode(ans[0]);
+        pri = ans_list_head;
+        for(int i = 1 ; i < ans.size() ; i++)
+        {
+            temp = new ListNode(ans[i]);
+            pri->next = temp;
+            pri = temp;
+        }
+        
+        return ans_list_head;
+        
+    }
+};
