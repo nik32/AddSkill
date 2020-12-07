@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int smallestDistancePair(vector<int>& nums, int k) {        
+        /*
+        //FIRST APPROACH - BRUTE - O(n^2 log n^2) 
+        int len = nums.size(), i, j, ans = INT_MAX, d;
+        vector<int> dist_of_pair;
+        for(i = 0 ; i < len - 1; i++)
+            for(j = i+1 ; j < len ; j++)
+                dist_of_pair.push_back(abs(nums[i] - nums[j]));
+        sort(dist_of_pair.begin(), dist_of_pair.end());
+        
+        return dist_of_pair[k-1];*/
+        
+        //Second apprach - using the fact that max dist can't be more than the maximum elemnt i.e 10^8 we can just count the number of pairs with same distance remove those pari at once
+        int len = nums.size(), i, j, max = 0;
+        int *pairs_with_dist = (int *)calloc(100000000, sizeof(int));
+        for(i = 0 ; i < len - 1; i++)
+        {
+            max = nums[i] > max ? nums[i] : max;
+            for(j = i+1 ; j < len ; j++)
+                pairs_with_dist[abs(nums[i] - nums[j])]++;
+        }
+        max = nums[i] > max ? nums[i] : max;
+        
+        
+        for(i = 0 ; i <= max ; i++)
+        {
+            k -= pairs_with_dist[i];
+            if(k <= 0) 
+                return i;
+        }
+        return -1;
+        
+    }
+};
