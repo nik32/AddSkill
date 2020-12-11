@@ -1,0 +1,217 @@
+<!Doctype html>
+<html>
+
+<head>
+    <title>Wheather</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+   <input type="text", id = "city-name">
+
+    <form id = "allUnits" style="display: inline;">
+        <input type="radio" name = "unit" value = "metric" onchange = "changeUnit(this)" checked>Celcius
+        <input type="radio" name = "unit" value= "imperial" onchange = "changeUnit(this)">Fahrenheit
+    </form>
+    <button onclick="getTemp(document.getElementById('city-name'))">Search</button>
+    <button onclick="getTemp(this)" value="cur_loc">Current Location Temp</button>
+
+    <br>
+
+    <div id = "temprature"></div>
+    <div id = "icon"></div>
+</body>
+
+<script>
+    function getTemp(city)
+    {
+        clearOutputs();//Each time this function is called, it is for a new query. So clear the outputs already displayed.
+        if(city.value == "")
+            return;
+        let apiCall;
+        let apiKey = "44283735812afd1f31a23ba0d72b42f9";
+        if(city.value == "cur_loc") {
+            if (navigator.geolocation)
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            else 
+                alert("Location Tracking is not supported by this browser.");
+        }
+        else
+            makeRequest(`http://api.openweathermap.org/data/2.5/weather?q=${city.value}&appid=${apiKey}`);
+    }
+
+    function showPosition(position) 
+    {
+        let apiKey = "44283735812afd1f31a23ba0d72b42f9";
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+        makeRequest(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`);//made the request here
+    }
+
+    function makeRequest(apiCall)
+    {
+        apiCall += "&units=" + $("input[name=unit]:checked", '#allUnits').val();//The jquery syntax gives us the value of the selected radio button
+        console.log(apiCall);
+        $.ajax(
+            {
+                url: apiCall,
+                method: 'GET',
+                success: (response) => {
+                    document.getElementById("temprature").innerHTML = `${(response.main.temp).toFixed(1)}`;
+                    document.getElementById("icon").innerHTML = `${response.weather[0].description}`;
+                    document.getElementById("city-name").value = response.name;
+
+                    /*return response.name; /*
+                                            QUESTION - 
+                                            how can I can return a value from here and it will be available to the caller of makeRequest() 
+                                            [like showPosition()]
+                                            NOTE - This is not as simple as it seems!! You can't return a value in any normal way you think.
+                                            
+                                            ANSWER -
+                                            given in the end comments.
+                                            */
+                },
+                error: (response) => {
+                    if(response.responseJSON.message === "city not found")
+                        alert(response.responseJSON.message);
+                    else
+                        alert("Could not get the temp right now. Try again later");
+                },  
+            }
+        );
+    }
+
+    function changeUnit(unit)
+    {
+        let tempdiv = document.getElementById("temprature");
+        let temp = tempdiv.innerHTML;
+        if(temp == "")
+            return;
+        else {
+            if(unit.value == "metric") //means we have to convert to celcius
+                tempdiv.innerHTML = ((temp - 32) * (5/9)).toFixed(1);
+            else //means we have to convert to fahrenheit
+                tempdiv.innerHTML = ((temp * (9/5)) + 32).toFixed(1);
+        }
+    }
+
+    function showError(error) 
+    {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+            alert("You denied to share your Location!!!.");
+            break;
+            case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+            case error.TIMEOUT:
+            alert("The request to get location timed out.");
+            break;
+            case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+        }
+    }
+
+    function clearOutputs() {
+        document.getElementById("temprature").innerHTML = "";
+        document.getElementById("icon").innerHTML = "";
+    }
+</script>
+
+</html>
+
+
+<!-- 
+
+    ANSWER FOR THE QUESTION (REGARDING returning value from inside the sucess callback function) -
+    
+    The appraches you tried - 
+    1.  First you explicitly tried to return from the sucess callback function itself as shown in the comment.
+        Reason for Failure - the callback function will return the value from the ajax() call, not from makeRequest(). And as ajax() is predefined
+        we can't make it return the value to makeRequest()
+    2.  You made a variable (let's say "name") inside the makeRequest(). You assigned "name" the return value, inside the sucess callback function. 
+        Now you returned it at the end of makeRequest(). Code is given below -
+
+                                    function makeRequest(apiCall, myResolve)
+                                    {
+                                        let name;
+                                        apiCall += "&units=" + $("input[name=unit]:checked", '#allUnits').val();//The jquery syntax gives us the value of the selected radio button
+                                        console.log(apiCall);
+                                        $.ajax(
+                                            {
+                                                url: apiCall,
+                                                method: 'GET',
+                                                success: (response) => {
+                                                    document.getElementById("temprature").innerHTML = `${(response.main.temp).toFixed(1)}`;
+                                                    document.getElementById("icon").innerHTML = `${response.weather[0].description}`;
+
+                                                    name = response.name;
+                                                    console.log(name);//this log will execute after we get response from server. Whihc will take some time. So first, the log given at the end will execute 
+                                                },
+                                                error: (response) => {
+                                                    if(response.responseJSON.message === "city not found")
+                                                        alert(response.responseJSON.message);
+                                                    else
+                                                        alert("Could not get the temp right now. Try again later");
+                                                },  
+                                            }
+                                        );
+                                        console.log(name);//first this will execute
+                                        return name
+                                    }
+
+        Reason for failure - the above did not work because ajax() works asynchronously.See when ajax() will be called, the request will be sent to server
+        which would take some time. So should we stop the program there? No, it would be better if let the program run untill we get the respose from server.
+        That is why ajax() is made asynchronous by its makers, it will not stop the program untill we get the response back, instead it
+        will transfer the control to code which is after it. The code after ajax() is our console.log() & return statement. Now the value of name will still
+        be undefined because it will be initialized only after we get the reponse from the server (inside the success callback function).
+        So the value returned will be undefined. 
+        You can check this by seeing the logs produced by this code. You will get undefined first then the name of the city.
+
+    
+        Solution - 
+        The solution is to the call makeRequest() inside a promise and resolve it inside the callback function of success.
+        in the resolve() pass the value you want to return. This will make the return value available inside the then handler 
+        of makeRequest() where you can do whatever you with the value.The solution code is given below -
+        NOTE - as we will be calling resolve() inside the makeRequest() we need to pass resolves' refrence as an argument to makeRequest() for callback.
+
+                                    function showPosition(position) 
+                                    {
+                                        let apiKey = "44283735812afd1f31a23ba0d72b42f9";
+                                        let lat = position.coords.latitude;
+                                        let lon = position.coords.longitude;
+                                        new Promise(
+                                            (myResolve) => {
+                                                makeRequest(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`, myResolve);
+                                            }
+                                        ).then(
+                                            (value) => {    console.log("inside parentPromise:" +value);   }
+                                        );
+                                    }
+
+                                    function makeRequest(apiCall, myResolve)
+                                    {
+                                        apiCall += "&units=" + $("input[name=unit]:checked", '#allUnits').val();//The jquery syntax gives us the value of the selected radio button
+                                        console.log(apiCall);
+                                        $.ajax(
+                                            {
+                                                url: apiCall,
+                                                method: 'GET',
+                                                success: (response) => {
+                                                    document.getElementById("temprature").innerHTML = `${(response.main.temp).toFixed(1)}`;
+                                                    document.getElementById("icon").innerHTML = `${response.weather[0].description}`;
+
+                                                    myResolve(response.name);
+                                                },
+                                                error: (response) => {
+                                                    if(response.responseJSON.message === "city not found")
+                                                        alert(response.responseJSON.message);
+                                                    else
+                                                        alert("Could not get the temp right now. Try again later");
+                                                },  
+                                            }
+                                        );
+                                    }
+
+ -->
