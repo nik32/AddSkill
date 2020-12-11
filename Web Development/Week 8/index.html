@@ -1,0 +1,109 @@
+<!-- Improvments -
+        1. you can create each taskdiv as component and make it shawdow so that it is not modifiable in browser
+        2. Take the solution ofadding the listner as given in solution -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>To-Do List</title>
+        <style src = ""></style>
+    </head>
+    <body>
+       <input id = "inputTextfeild" type="text" value = "Enter Task">
+       <button onclick="addToList()">Add Task</button><br>
+       
+       <div id = "taskLists"></div><br>
+
+       <button onclick="clearList()">Clear List</button>
+    </body>
+    <script>
+        /*
+            There is a unique id given to each task (in our web page, task is represent in a div so the div is given this id in its "id" attribute).
+            Now the logic you have used to assign this ID is just mantaining a variable - next_taskId. This will contain the ID we can 
+            assign to a new task. And once we have assigned the ID to a new task,we increment this next_taskID var to generate a new ID.
+
+            *NOTE - Because we can edit and remove a task there can be a lot of id's which can be missed. So for it we can employ the foloowing change to 
+            id generationg algo - 
+                1. use DateTime as ID - this will mostly give a unique id. But if a user manually changes his date time there can be a 
+                calsh and we can end up replacing an existing task in worst case (if incidently bith their dates and time match. Which improbable but can happen)
+                3. We can create a UUid generation algo given on net.  
+
+        */
+
+        let task;
+        window.onload = function()
+        {
+            task = JSON.parse(localStorage.getItem("task"));
+            console.log("hi! You reloaded the page");
+            if(task == undefined)
+                task = {next_taskId: 0};
+            for(task_id in task)
+            {
+                if(task_id == "next_taskId")//"next_taskId" is not a valid id so we skip it if found
+                    continue;
+                taskLists.innerHTML += `<div id = "${task_id}">
+                                            <span> ${task[task_id]["name"]} </span>
+                                            <button onclick = "markAsDone(${task_id})">Done</button>
+                                            <button onclick = "remove(${task_id}, true)">Edit</button>
+                                            <button onclick = "remove(${task_id}, false)">Remove</button>
+                                        </div>`;
+                strickOut(task_id, task[task_id]["status"]);
+            }
+            //console.log(task);
+        }
+
+        function addToList()
+        {
+            if(inputTextfeild.value == "")
+                alert("Enter valid value");
+            else
+            {
+                taskLists.innerHTML +=     `<div id = "${task["next_taskId"]}">
+                                                <span> ${inputTextfeild.value} </span>
+                                                <button onclick = "markAsDone(${task["next_taskId"]})">Done</button>
+                                                <button onclick = "remove(${task["next_taskId"]}, true)">Edit</button>
+                                                <button onclick = "remove(${task["next_taskId"]}, false)">Remove</button>
+                                            </div>`;
+                task[task["next_taskId"]] = {name: `${inputTextfeild.value}`, status : false};//adding the new task to task{} object
+                task["next_taskId"]++;
+                localStorage.setItem("task", JSON.stringify(task));
+                inputTextfeild.value = "Enter Task";
+            }
+        }
+
+        function markAsDone(divId)
+        {
+            task[divId]["status"] = !task[divId]["status"];//we are told to mark as done if the task is not done and visa verca. So it is just inversion (this inversion in acheived using ! operator)
+            strickOut(divId, task[divId]["status"]);
+            console.log(task[divId]["status"]);
+            localStorage.setItem("task", JSON.stringify(task));
+        }
+
+        function strickOut(divId, status)
+        {
+            task_name = document.getElementById(divId).querySelector("span");
+            if(status)
+                task_name.style.textDecoration = "line-through";
+            else
+                task_name.style.textDecoration = null;
+        }
+
+        function remove(divId, edit)
+        {
+            if(edit)//if we are removing to task to edit it then the task anme has to be stored in the input feild
+                inputTextfeild.value = document.getElementById(divId).firstElementChild.innerHTML;
+            
+            document.getElementById(divId).remove();
+            delete task[divId];
+            localStorage.setItem("task", JSON.stringify(task));
+        }
+
+        function clearList()
+        {
+            localStorage.removeItem("task");
+            window.location.reload();//Here we are calling window.onload function indirectly (This line will reload the page and thus call the window.onload function)
+                                    //And becasue we have removed task from local storage, reloading will cler all the list items shown in browser also
+        }
+    </script>
+
+</html>
