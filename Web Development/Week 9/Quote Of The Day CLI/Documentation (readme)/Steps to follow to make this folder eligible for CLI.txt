@@ -1,0 +1,14 @@
+refrence - https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs
+
+
+- make the CLI app folder and open cmd from it
+- type following command -    
+					npm init -y
+  the above will create a package.json file with name as "-y". Change it to "quote_of_the_day"
+- create a folder named bin (inside app folder) and add a new file to the bin folder named index.js. Open the index.js file   and type in you code with first line being -
+					#!/usr/bin/env node
+- Next, open the package.json file in the root of the project in your text editor. Change the main value to bin/index.js.     Add a new key for bin with the following text.
+
+ 					"bin": {
+   						"qod": "./bin/index.js"
+ 					}

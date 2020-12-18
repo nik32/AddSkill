@@ -1,0 +1,16 @@
+
+{
+  "name": "quote_of_the_day_http",
+  "version": "1.0.0",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nikhil Choudhary",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "bin": {
+    "qod": "./bin/index.js"
+  }
+}
