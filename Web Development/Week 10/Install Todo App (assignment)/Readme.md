@@ -1,3 +1,5 @@
+<b>NOTE</b>- The task.js file in controllers Directory is the main assignment Ans file
+
 # Steps to Build the project (on local host) #
 1. Download all the code files in this folder and save it on your localhost.
 2. Make sure that node is installed.
@@ -5,5 +7,3 @@
 
 # Steps to Run the project (on local host) #
 1. In the cmd type - node express
-
-NOTE - The task.js file in controllers Directory is the main assignment Ans file
