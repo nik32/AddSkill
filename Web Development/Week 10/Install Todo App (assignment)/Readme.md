@@ -5,3 +5,5 @@
 
 # Steps to Run the project (on local host) #
 1. In the cmd type - node express
+
+NOTE - The task.js file in controllers Directory is the main assignment Ans file
